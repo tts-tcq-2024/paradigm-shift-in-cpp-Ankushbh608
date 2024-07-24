@@ -17,35 +17,48 @@ struct ParameterRange {
     float highBreach;
 };
 
-ParameterStatus getParameterStatus(float value, const ParameterRange& range) {
+ParameterStatus getBreachStatus(float value, const ParameterRange& range) {
     if (value < range.lowBreach) {
         return LOW_BREACH;
-    } else if (value < range.lowWarning) {
-        return LOW_WARNING;
-    } else if (value < range.highWarning) {
-        return NORMAL;
-    } else if (value < range.highBreach) {
-        return HIGH_WARNING;
-    } else {
+    }
+    if (value >= range.highBreach) {
         return HIGH_BREACH;
     }
+    return NORMAL; // Not in breach
+}
+
+ParameterStatus getWarningStatus(float value, const ParameterRange& range) {
+    if (value < range.lowWarning) {
+        return LOW_WARNING;
+    }
+    if (value >= range.highWarning) {
+        return HIGH_WARNING;
+    }
+    return NORMAL; // Normal if not in any warning range
+}
+
+ParameterStatus getParameterStatus(float value, const ParameterRange& range) {
+    ParameterStatus breachStatus = getBreachStatus(value, range);
+    if (breachStatus != NORMAL) {
+        return breachStatus;  // Return if it's a breach
+    }
+    return getWarningStatus(value, range); // Check warning status if not a breach
 }
 
 std::string translateStatusToMessage(const std::string& parameter, ParameterStatus status) {
-    switch (status) {
-        case LOW_BREACH:
-            return parameter + " is below the safe range!";
-        case LOW_WARNING:
-            return "Warning: " + parameter + " is approaching discharge.";
-        case NORMAL:
-            return parameter + " is normal.";
-        case HIGH_WARNING:
-            return "Warning: " + parameter + " is approaching charge-peak.";
-        case HIGH_BREACH:
-            return parameter + " is above the safe range!";
-        default:
-            return "Unknown status for " + parameter;
+    static const std::string messages[] = {
+        parameter + " is below the safe range!",   // LOW_BREACH
+        "Warning: " + parameter + " is approaching discharge.", // LOW_WARNING
+        parameter + " is normal.",                // NORMAL
+        "Warning: " + parameter + " is approaching charge-peak.", // HIGH_WARNING
+        parameter + " is above the safe range!"   // HIGH_BREACH
+    };
+
+    if (status < LOW_BREACH || status > HIGH_BREACH) {
+        return "Unknown status for " + parameter;
     }
+
+    return messages[status];
 }
 
 bool checkTemperature(float temperature) {
@@ -73,18 +86,19 @@ bool batteryIsOk(float temperature, float soc, float chargeRate) {
     bool tempOk = checkTemperature(temperature);
     bool socOk = checkSoc(soc);
     bool chargeRateOk = checkChargeRate(chargeRate);
+
     return tempOk && socOk && chargeRateOk;
 }
 
 int main() {
-    // Test cases to verify battery safety checks and warning messages
-    assert(batteryIsOk(25, 70, 0.7) == true);  // Within normal range
-    assert(batteryIsOk(50, 85, 0) == false);   // Temperature and SoC out of range
-    assert(batteryIsOk(-1, 50, 0.5) == false); // Temperature out of range
-    assert(batteryIsOk(25, 10, 0.5) == false); // SoC out of range
-    assert(batteryIsOk(25, 50, 0.9) == false); // Charge rate out of range
-    assert(batteryIsOk(42, 78, 0.6) == true);  // Within warning range
-    assert(batteryIsOk(1, 21, 0.76) == true);  // Within warning range
+
+    assert(batteryIsOk(25, 70, 0.7) == true); 
+    assert(batteryIsOk(50, 85, 0) == false);
+    assert(batteryIsOk(-1, 50, 0.5) == false);
+    assert(batteryIsOk(25, 10, 0.5) == false);
+    assert(batteryIsOk(25, 50, 0.9) == false);
+    assert(batteryIsOk(42, 78, 0.6) == true);
+    assert(batteryIsOk(1, 21, 0.76) == true);
 
     std::cout << "All tests passed!\n";
     return 0;
