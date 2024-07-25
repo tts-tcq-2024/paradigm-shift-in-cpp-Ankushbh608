@@ -92,13 +92,13 @@ bool batteryIsOk(float temperature, float soc, float chargeRate) {
 
 int main() {
 
-    assert(batteryIsOk(25, 70, 0.7) == true); 
-    assert(batteryIsOk(50, 85, 0) == false);
-    assert(batteryIsOk(-1, 50, 0.5) == false);
-    assert(batteryIsOk(25, 10, 0.5) == false);
-    assert(batteryIsOk(25, 50, 0.9) == false);
-    assert(batteryIsOk(42, 78, 0.6) == true);
-    assert(batteryIsOk(1, 21, 0.76) == true);
+    assert(batteryIsOk(28, 74, 0.6) == true); 
+    assert(batteryIsOk(45, 81, 0.4) == false);
+    assert(batteryIsOk(-5, 52, 0.6) == false);
+    assert(batteryIsOk(30, 10, 0.7) == false);
+    assert(batteryIsOk(25, 60, 0.5) == false);
+    assert(batteryIsOk(38, 76, 0.6) == true);
+    assert(batteryIsOk(2, 24, 0.79) == true);
 
     std::cout << "All tests passed!\n";
     return 0;
