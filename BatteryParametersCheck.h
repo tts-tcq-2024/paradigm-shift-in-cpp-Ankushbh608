@@ -1,5 +1,5 @@
-#ifndef BATTERY_PARAMETER_CHECK_H
-#define BATTERY_PARAMETER_CHECK_H
+#ifndef BATTERY_PARAMETERS_CHECK_H
+#define BATTERY_PARAMETERS_CHECK_H
 
 #include <string>
 
@@ -31,4 +31,4 @@ bool checkSoc(float soc, BreachStatus& breachStatus, WarningStatus& warningStatu
 bool checkChargeRate(float chargeRate, BreachStatus& breachStatus, WarningStatus& warningStatus);
 bool batteryIsOk(float temperature, float soc, float chargeRate);
 
-#endif // BATTERY_PARAMETER_CHECK_H
+#endif // BATTERY_PARAMETERS_CHECK_H
