@@ -1,4 +1,4 @@
-#include "BatteryParameterCheck.h"
+#include "BatteryParametersCheck.h"
 #include <iostream>
 
 WarningStatus getWarningStatus(float value, const ParameterRange& range) {
