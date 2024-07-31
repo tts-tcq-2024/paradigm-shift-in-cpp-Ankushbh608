@@ -67,7 +67,7 @@ bool checkSoc(float soc, BreachStatus& breachStatus, WarningStatus& warningStatu
 }
 
 bool checkChargeRate(float chargeRate, BreachStatus& breachStatus, WarningStatus& warningStatus) {
-    ParameterRange chargeRateRange = {0, 0, 0.8 - 0.8 * 0.05, 0.8};
+    ParameterRange chargeRateRange = {0, 0 + 0.8 * 0.05, 0.8 - 0.8 * 0.05, 0.8};
     warningStatus = getWarningStatus(chargeRate, chargeRateRange);
     breachStatus = getBreachStatus(chargeRate, chargeRateRange);
     return breachStatus == NO_BREACH;
