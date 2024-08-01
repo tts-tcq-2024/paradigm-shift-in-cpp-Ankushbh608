@@ -28,7 +28,7 @@ std::string getBreachMessage(const std::string& parameter, BreachStatus breachSt
     if (breachStatus == HIGH_BREACH) {
         return parameter + " is above the safe range!";
     }
-    return "";
+    return parameter + " is normal.";
 }
 
 std::string getWarningMessage(const std::string& parameter, WarningStatus warningStatus) {
@@ -38,7 +38,7 @@ std::string getWarningMessage(const std::string& parameter, WarningStatus warnin
     if (warningStatus == HIGH_WARNING) {
         return "Warning: " + parameter + " is approaching charge-peak.";
     }
-    return "";
+    return parameter + " is normal.";
 }
 
 std::string statusToMessageTranslation(const std::string& parameter, BreachStatus breachStatus, WarningStatus warningStatus) {
